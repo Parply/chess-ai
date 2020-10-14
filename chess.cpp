@@ -27,7 +27,7 @@ class chess
 		struct Position
 		{
 			int iRow;
-			int iColumn
+			int iColumn;
 		};
 		struct EnPassant
    		{
