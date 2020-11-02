@@ -1,7 +1,11 @@
 #pragma once
 #include <vector>
 #include <string>
+#include <deque>
 
+#include <string.h>
+
+using namespace std;
 
 class chess
 {
@@ -9,6 +13,7 @@ class chess
 		static int getPieceColour(char chPiece);
 		static bool isWhitePiece(char chPiece);
 		static bool isBlackPiece(char chPiece);
+                static string describePiece(char chPiece);
 
 		enum PieceColour
 		{
@@ -106,22 +111,41 @@ class game : chess
 
    	Position findKing( int iColour );
 
-	void parseMove( std::string move, Position* pFrom, Position* pTo, char* chPromoted = nullptr );
+	void parseMove( string move, Position* pFrom, Position* pTo, char* chPromoted = nullptr );
 
-   	void logMove( std::string &to_record );
+   	void logMove( string &to_record );
+        string getLastMove( void );
 
+        void deleteLastMove( void );
 	struct Round
    	{
-		std::string white_move;
-		std::string black_move;
+		string white_move;
+		string black_move;
    	};
 
-	std::vector<char> white_captured;
-   	std::vector<char> black_captured;
+        deque<Round> rounds;
+
+	vector<char> white_captured;
+   	vector<char> black_captured;
 
 	private:
 
    	// Represent the pieces in the board
    	char board[8][8];
+	struct Undo
+        {
+            bool bCanUndo;
+            bool bCapturedLastMove;
 
+            bool bCastlingKingSideAllowed;
+            bool bCastlingQueenSideAllowed;
+
+            EnPassant en_passant;
+            Castling  castling;
+            Promotion promotion;
+        } m_undo;
+        
+        int m_CurrentTurn;
+	int m_bGameFinished;
 };
+
